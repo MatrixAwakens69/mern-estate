@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      default:
+        "https://wallpapers.com/images/hd/basic-default-pfp-pxi77qv5o0zuz8j3.jpg",
+    },
   },
   { timestamps: true }
 );
