@@ -14,6 +14,9 @@ import {
   deleteUserStart,
   deleteUserSuccess,
   deleteUserFailure,
+  signOutStart,
+  signOutSuccess,
+  signOutFailure,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
@@ -63,7 +66,7 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handelDeleteUser = async () => {
+  const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
       const response = await fetch(`/api/user/delete/${currentUser._id}`, {
@@ -77,6 +80,21 @@ export default function Profile() {
       dispatch(deleteUserSuccess());
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const response = await fetch("/api/auth/signout");
+      const data = await response.json();
+      if (data.success === false) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess());
+    } catch (error) {
+      dispatch(signOutFailure(error.message));
     }
   };
 
@@ -165,12 +183,15 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span
-          onClick={handelDeleteUser}
+          onClick={handleDeleteUser}
           className="text-red-700 cursor-pointer font-semibold"
         >
           Delete account
         </span>
-        <span className="text-red-700 cursor-pointer font-semibold">
+        <span
+          onClick={handleSignOut}
+          className="text-red-700 cursor-pointer font-semibold"
+        >
           Sign out
         </span>
       </div>
